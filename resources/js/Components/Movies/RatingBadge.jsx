@@ -11,7 +11,7 @@ const RatingBadge = ({ rating }) => {
 
     return (
         <div
-            className={`flex flex-col items-center py-2 rounded-lg text-xs font-bold ${getRatingStyle(rating)}`}
+            className={`flex h-16 w-16 flex-col justify-center items-center py-2 rounded-lg text-sm font-bold ${getRatingStyle(rating)}`}
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"

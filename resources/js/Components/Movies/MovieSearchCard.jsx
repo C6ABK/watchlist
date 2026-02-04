@@ -29,7 +29,7 @@ const MovieSearchCard = ({
                     </div>
                 )}
             </div>
-            <div className="w-full py-2 pr-2 pl-4 flex flex-col justify-between">
+            <div className="w-full flex flex-col justify-between pr-2 py-2 pl-4">
                 <div className="flex">
                     <div className="flex flex-col gap-y-2 w-full">
                         <h3 className="font-bold text-xl text-left w-full">
@@ -43,11 +43,11 @@ const MovieSearchCard = ({
                             {endYear && <span> - {endYear}</span>}
                         </div>
                     </div>
-                    <div className="text-center ">
+                    <div className="flex flex-col">
                         {ratingAggregate && (
                             <>
                                 <RatingBadge rating={ratingAggregate} />
-                                <div className="text-xs mt-2">
+                                <div className="text-xs mt-2 text-center">
                                     {voteCount?.toLocaleString()} votes
                                 </div>
                             </>

@@ -69,12 +69,3 @@ export default function APIPage() {
         </AppLayout>
     );
 }
-// id,
-//     primaryTitle,
-//     originalTitle,
-//     imageUrl,
-//     startYear,
-//     endYear,
-//     ratingAggregate,
-//     voteCount,
-//     type
