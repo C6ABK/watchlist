@@ -59,14 +59,14 @@ const MovieSearchCard = ({
                             {endYear && <span> - {endYear}</span>}
                         </div>
                     </div>
-                    <div className="flex flex-col">
+                    <div className="flex w-full justify-end">
                         {ratingAggregate && (
-                            <>
+                            <div>
                                 <RatingBadge rating={ratingAggregate} />
-                                <div className="text-xs mt-2 text-center">
-                                    {voteCount?.toLocaleString()} votes
+                                <div className="text-[10px] sm:text-xs mt-2 text-center">
+                                    {voteCount?.toLocaleString()} <br/>votes
                                 </div>
-                            </>
+                            </div>
                         )}
                     </div>
                 </div>
