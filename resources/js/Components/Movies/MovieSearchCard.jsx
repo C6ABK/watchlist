@@ -48,7 +48,7 @@ const MovieSearchCard = ({
             <div className="w-full flex flex-col justify-between pr-2 py-2 pl-4">
                 <div className="flex">
                     <div className="flex flex-col gap-y-2 w-full pr-2">
-                        <h3 className="font-bold text-lg lg:text-xl text-left w-full">
+                        <h3 className="font-bold text-lg lg:text-lg text-left w-full">
                             {primaryTitle}
                         </h3>
                         <h4 className="text-xs text-neutral-content">
@@ -59,7 +59,7 @@ const MovieSearchCard = ({
                             {endYear && <span> - {endYear}</span>}
                         </div>
                     </div>
-                    <div className="flex w-full justify-end">
+                    <div className="flex justify-end">
                         {ratingAggregate && (
                             <div>
                                 <RatingBadge rating={ratingAggregate} />
