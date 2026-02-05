@@ -1,0 +1,139 @@
+{
+    "id": "tt16311594",
+    "type": "movie",
+    "primaryTitle": "F1: The Movie",
+    "originalTitle": "F1",
+    "primaryImage": {
+        "url": "https://m.media-amazon.com/images/M/MV5BNGI0MDI4NjEtOWU3ZS00ODQyLWFhYTgtNGYxM2ZkM2Q2YjE3XkEyXkFqcGc@._V1_.jpg",
+        "width": 2764,
+        "height": 4096
+    },
+    "startYear": 2025,
+    "runtimeSeconds": 9300,
+    "genres": ["Action", "Drama", "Sport"],
+    "rating": {
+        "aggregateRating": 7.6,
+        "voteCount": 306650
+    },
+    "metacritic": {
+        "score": 68,
+        "reviewCount": 56
+    },
+    "plot": "A Formula One driver comes out of retirement to mentor and team up with a younger driver.",
+    "directors": [
+        {
+            "id": "nm2676052",
+            "displayName": "Joseph Kosinski",
+            "alternativeNames": ["Joe Kosinski"],
+            "primaryImage": {
+                "url": "https://m.media-amazon.com/images/M/MV5BODkwMzRhMTUtNDg4Ny00MTExLWJiYmUtZTZmNmM0NGY0ODg3XkEyXkFqcGc@._V1_.jpg",
+                "width": 703,
+                "height": 1055
+            },
+            "primaryProfessions": ["director", "producer", "writer"]
+        }
+    ],
+    "writers": [
+        {
+            "id": "nm2676052",
+            "displayName": "Joseph Kosinski",
+            "alternativeNames": ["Joe Kosinski"],
+            "primaryImage": {
+                "url": "https://m.media-amazon.com/images/M/MV5BODkwMzRhMTUtNDg4Ny00MTExLWJiYmUtZTZmNmM0NGY0ODg3XkEyXkFqcGc@._V1_.jpg",
+                "width": 703,
+                "height": 1055
+            },
+            "primaryProfessions": ["director", "producer", "writer"]
+        },
+        {
+            "id": "nm0472567",
+            "displayName": "Ehren Kruger",
+            "primaryImage": {
+                "url": "https://m.media-amazon.com/images/M/MV5BMTc4Nzk4NTg2Nl5BMl5BanBnXkFtZTYwNTQ4OTU3._V1_.jpg",
+                "width": 485,
+                "height": 317
+            },
+            "primaryProfessions": ["producer", "script_department", "writer"]
+        }
+    ],
+    "stars": [
+        {
+            "id": "nm0000093",
+            "displayName": "Brad Pitt",
+            "alternativeNames": ["Weatherman"],
+            "primaryImage": {
+                "url": "https://m.media-amazon.com/images/M/MV5BMjA1MjE2MTQ2MV5BMl5BanBnXkFtZTcwMjE5MDY0Nw@@._V1_.jpg",
+                "width": 1363,
+                "height": 2048
+            },
+            "primaryProfessions": ["actor", "executive", "producer"]
+        },
+        {
+            "id": "nm0174403",
+            "displayName": "Kerry Condon",
+            "primaryImage": {
+                "url": "https://m.media-amazon.com/images/M/MV5BMTY5NjgyNDU3OV5BMl5BanBnXkFtZTgwNzA4NDczNjE@._V1_.jpg",
+                "width": 3744,
+                "height": 4680
+            },
+            "primaryProfessions": ["actress"]
+        },
+        {
+            "id": "nm5072010",
+            "displayName": "Damson Idris",
+            "primaryImage": {
+                "url": "https://m.media-amazon.com/images/M/MV5BNDg0YjMzNTMtYWE0Yi00OTZmLWIyNmYtMzkyNzVlZDYxMjYzXkEyXkFqcGc@._V1_.jpg",
+                "width": 1792,
+                "height": 2509
+            },
+            "primaryProfessions": ["actor", "producer"]
+        },
+        {
+            "id": "nm0000849",
+            "displayName": "Javier Bardem",
+            "alternativeNames": ["Javier Encinas", "Benito González"],
+            "primaryImage": {
+                "url": "https://m.media-amazon.com/images/M/MV5BMTY1NTc4NTYzMF5BMl5BanBnXkFtZTcwNDIwOTY1NA@@._V1_.jpg",
+                "width": 1370,
+                "height": 2048
+            },
+            "primaryProfessions": ["actor", "music_department", "producer"]
+        }
+    ],
+    "originCountries": [
+        {
+            "code": "US",
+            "name": "United States"
+        }
+    ],
+    "spokenLanguages": [
+        {
+            "code": "eng",
+            "name": "English"
+        }
+    ],
+    "interests": [
+        {
+            "id": "in0000001",
+            "name": "Action"
+        },
+        {
+            "id": "in0000004",
+            "name": "Car Action",
+            "isSubgenre": true
+        },
+        {
+            "id": "in0000076",
+            "name": "Drama"
+        },
+        {
+            "id": "in0000172",
+            "name": "Motorsport",
+            "isSubgenre": true
+        },
+        {
+            "id": "in0000174",
+            "name": "Sport"
+        }
+    ]
+}
