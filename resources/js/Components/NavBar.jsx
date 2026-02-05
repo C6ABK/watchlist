@@ -42,7 +42,7 @@ export default function NavBar() {
                     </div>
                     <ul
                         tabIndex="-1"
-                        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+                        className="menu menu-lg dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
                     >
                         {isAuthenticated ? (
                             <>
@@ -95,7 +95,7 @@ export default function NavBar() {
             <div className="navbar-end flex gap-x-6 items-center">
                 {isAuthenticated && (
                     <>
-                        <div>Welcome, {user.first_name}</div>
+                        <div className="hidden lg:block">Welcome, {user.first_name}</div>
                         <form onSubmit={handleLogout}>
                             <button
                                 type="submit"

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import RatingBadge from "./RatingBadge";
 
 const MovieSearchCard = ({
@@ -11,19 +12,34 @@ const MovieSearchCard = ({
     voteCount,
     type,
 }) => {
+    const [imageLoaded, setImageLoaded] = useState(false);
+    const [imageError, setImageError] = useState(false);
+
     return (
         <div
             key={id}
             className="flex bg-neutral border border-neutral rounded-lg shadow-xl cursor-pointer lg:hover:scale-105 hover:border hover:border-secondary transition-all duration-200 group relative"
         >
             <div>
-                {imageUrl ? (
+                {/* Placeholder/Loading state */}
+                {imageUrl && !imageLoaded && !imageError && (
+                    <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-neutral animate-pulse">
+                        <span className="loading loading-dots loading-xl text-secondary"></span>
+                    </div>
+                )}
+
+                {imageUrl && !imageError && (
                     <img
                         src={imageUrl}
                         alt={primaryTitle}
-                        className="h-64 max-w-40 overflow-hidden object-cover rounded-l-lg "
+                        loading="lazy"
+                        className="h-64 max-w-40 overflow-hidden object-cover rounded-l-lg"
+                        onLoad={() => setImageLoaded(true)}
+                        onError={() => setImageError(true)}
                     />
-                ) : (
+                )}
+
+                {(!imageUrl || imageError) && (
                     <div className="flex justify-center items-center h-64 w-40 object-cover rounded-l-lg text-secondary text-xs tracking-wide bg-neutral-900 overflow-hidden">
                         No image
                     </div>
@@ -31,8 +47,8 @@ const MovieSearchCard = ({
             </div>
             <div className="w-full flex flex-col justify-between pr-2 py-2 pl-4">
                 <div className="flex">
-                    <div className="flex flex-col gap-y-2 w-full">
-                        <h3 className="font-bold text-xl text-left w-full">
+                    <div className="flex flex-col gap-y-2 w-full pr-2">
+                        <h3 className="font-bold text-lg lg:text-xl text-left w-full">
                             {primaryTitle}
                         </h3>
                         <h4 className="text-xs text-neutral-content">
@@ -57,7 +73,7 @@ const MovieSearchCard = ({
                 <div className="flex flex-col">
                     <div className="flex justify-between items-center">
                         <div>{type}</div>
-                        <button className="btn btn-base-300 hover:btn-secondary rounded-full text-xl w-10 flex items-center justify-center transition-colors duration-200">
+                        <button className="btn btn-base-300 hover:btn-secondary rounded-full text-xl w-10 flex items-center justify-center transition-colors duration-200 focus:btn-secondary">
                             +
                         </button>
                     </div>
