@@ -50,7 +50,7 @@ export default function NavBar() {
                                     <Link href="/">List</Link>
                                 </li>
                                 <li>
-                                    <Link href="/API">API</Link>
+                                    <Link href="/movies/index">Search</Link>
                                 </li>
                             </>
                         ) : (
@@ -77,7 +77,7 @@ export default function NavBar() {
                                 <Link href="/">List</Link>
                             </li>
                             <li>
-                                <Link href="/API">API</Link>
+                                <Link href="/movies/index">Search</Link>
                             </li>
                         </>
                     ) : (
@@ -95,7 +95,9 @@ export default function NavBar() {
             <div className="navbar-end flex gap-x-6 items-center">
                 {isAuthenticated && (
                     <>
-                        <div className="hidden lg:block">Welcome, {user.first_name}</div>
+                        <div className="hidden lg:block">
+                            Welcome, {user.first_name}
+                        </div>
                         <form onSubmit={handleLogout}>
                             <button
                                 type="submit"

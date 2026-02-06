@@ -10,10 +10,6 @@ Route::get('/', function () {
     return Inertia::render('Index');
 });
 
-Route::get('/API', function () {
-    return Inertia::render('API');
-});
-
 Route::get('/register', [RegisterUserController::class, 'create'])->middleware('guest');
 Route::post('/register', [RegisterUserController::class, 'store'])->middleware('guest');
 
@@ -23,4 +19,8 @@ Route::post('/login', [SessionController::class, 'store'])->middleware('guest');
 Route::post('/logout', [SessionController::class, 'destroy'])->middleware('auth');
 
 // Movies
+Route::get('/movies/index', [MovieController::class, 'index'])->name('movies.search')->middleware('auth');
+Route::post('/movies/search', [MovieController::class, 'search'])->name('movies.search.post')->middleware('auth');
+Route::delete('/movies/search', [MovieController::class, 'clearSearch'])->name('movies.search.clear')->middleware('auth');
+Route::post('/movies/clearSearch', [MovieController::class, 'clearSearch'])->name('movies.search.clear')->middleware('auth');
 Route::get('/movies/{id}', [MovieController::class, 'show'])->middleware('auth');

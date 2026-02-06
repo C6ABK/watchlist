@@ -13,7 +13,63 @@ class MovieController extends Controller
      */
     public function index()
     {
-        //
+        $searchResults = session('movie_search_results', []);
+        $searchTerm = session('movie_search_term', '');
+
+        return Inertia::render('Movie/MovieSearch', [
+            'movies' => $searchResults,
+            'searchTerm' => $searchTerm
+        ]);
+    }
+
+    public function search(Request $request)
+    {
+        $request->validate([
+            'query' => 'required|string|min:1|max:255'
+        ]);
+
+        $searchTerm = $request->input('query');
+
+        try {
+            $response = Http::timeout(10)->get("https://api.imdbapi.dev/search/titles", [
+                'query' => $searchTerm
+            ]);
+
+            if ($response->successful()) {
+                $data = $response->json();
+                $movies = $data['titles'] ?? [];
+
+                // Store in session
+                session(['movie_search_results' => $movies]);
+                session(['movie_search_term' => $searchTerm]);
+
+                return Inertia::render('Movie/MovieSearch', [
+                    'success' => true,
+                    'movies' => $movies
+                ]);
+            }
+            
+            return Inertia::render('Movie/MovieSearch', [
+                'movies' => [],
+                'searchTerm' => $searchTerm,
+                'error' => 'Failed to fetch movie data'
+            ]);
+        } catch(\Exception $e) {
+            return Inertia::render('Movie/MovieSearch', [
+                'movies' => [],
+                'searchTerm' => $searchTerm,
+                'error' => 'An error occurred while searching'
+            ]);
+        }
+    }
+
+    public function clearSearch()
+    {
+        session()->forget(['movie_search_results', 'movie_search_term']);
+        return Inertia::render('Movie/MovieSearch', [
+            'movies' => [],
+            'searchTerm' => ''
+        ]);
     }
 
     /**
