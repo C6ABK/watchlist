@@ -1,6 +1,7 @@
 import Countries from "../../Components/Movies/Countries";
 import Interests from "../../Components/Movies/Interests";
 import Metacritic from "../../Components/Movies/Metacritic";
+import PrimaryImage from "../../Components/Movies/PrimaryImage";
 import RatingBadge from "../../Components/Movies/RatingBadge";
 import Runtime from "../../Components/Movies/Runtime";
 import Stars from "../../Components/Movies/Stars";
@@ -16,7 +17,7 @@ const ShowMoviePage = ({ movie }) => {
             >
                 ← Back to search results
             </Link>
-            <div className="flex flex-col bg-neutral rounded-lg shadow-xl p-6">
+            <div className="flex flex-col bg-neutral rounded-lg shadow-xl p-4">
                 <div className="flex w-full justify-between">
                     <div className="flex flex-col w-full gap-y-4 md:pr-4">
                         <div className="flex gap-x-4">
@@ -43,6 +44,17 @@ const ShowMoviePage = ({ movie }) => {
                             </div>
                         </div>
                         <div className="text-sm text-justify">{movie.plot}</div>
+
+                        {/* Mobile Add to Watchlist Button */}
+                        <div className="md:hidden border-t border-neutral-800 pt-4">
+                            <button className="btn btn-secondary w-full mb-4 py-6 font-bold">
+                                Add to Watchlist +
+                            </button>
+                            {movie?.primaryImage?.url && (
+                                <PrimaryImage url={movie.primaryImage.url} />
+                            )}
+                        </div>
+
                         <div className="flex justify-between border-t border-neutral-800 pt-4">
                             {movie.runtimeSeconds && (
                                 <Runtime
@@ -98,12 +110,9 @@ const ShowMoviePage = ({ movie }) => {
 
                     <div className="flex-col hidden md:block">
                         {movie?.primaryImage?.url && (
-                            <img
-                                src={movie.primaryImage.url}
-                                className="w-lg overflow-hidden object-cover rounded-lg"
-                            />
+                            <PrimaryImage url={movie.primaryImage.url} />
                         )}
-                        <button className="btn btn-secondary w-full mt-6 py-6 font-bold">
+                        <button className="btn btn-secondary w-full mt-4 py-6 font-bold">
                             Add to Watchlist +
                         </button>
                     </div>
@@ -113,53 +122,3 @@ const ShowMoviePage = ({ movie }) => {
     );
 };
 export default ShowMoviePage;
-
-/* 
-    JSON RESPONSE USAGE NOTES    
-
-    Top-Level Properties ------------------------------------------------------------
-    movie.id                    // "tt16311594"
-    movie.type                  // "movie"
-    movie.primaryTitle          // "F1: The Movie"
-    movie.originalTitle         // "F1"
-    movie.startYear             // 2025
-    movie.runtimeSeconds        // 9300
-    movie.genres                // ["Action", "Drama", "Sport"]
-    movie.plot                  // "A Formula One driver comes out..."
-
-    Nested Object Properties --------------------------------------------------------
-    // Primary Image
-    movie.primaryImage.url      // "https://m.media-amazon.com/images/..."
-    movie.primaryImage.width    // 2764
-    movie.primaryImage.height   // 4096
-
-    // Rating
-    movie.rating.aggregateRating  // 7.6
-    movie.rating.voteCount       // 306650
-
-    // Metacritic
-    movie.metacritic.score       // 68
-    movie.metacritic.reviewCount // 56
-
-    Array Properties (People) --------------------------------------------------------
-    // Origin Countries
-    movie.originCountries[0].code            // "US"
-    movie.originCountries[0].name            // "United States"
-
-    // Spoken Languages
-    movie.spokenLanguages[0].code            // "eng"
-    movie.spokenLanguages[0].name            // "English"
-
-    // Interests/Genres
-    movie.interests[0].id                    // "in0000001"
-    movie.interests[0].name                  // "Action"
-    movie.interests[0].isSubgenre            // true/false (optional)
-
-    Usage Examples --------------------------------------------------------------------
-    // Safe access with optional chaining
-    {movie?.primaryTitle}
-    {movie?.rating?.aggregateRating}/10
-    {movie?.primaryImage?.url && <img src={movie.primaryImage.url} />}
-    {movie?.directors?.map(director => director.displayName).join(', ')}
-    {movie?.genres?.join(', ')}
-*/
