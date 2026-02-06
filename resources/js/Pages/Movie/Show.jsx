@@ -1,3 +1,5 @@
+import Countries from "../../Components/Movies/Countries";
+import Interests from "../../Components/Movies/Interests";
 import Metacritic from "../../Components/Movies/Metacritic";
 import RatingBadge from "../../Components/Movies/RatingBadge";
 import Runtime from "../../Components/Movies/Runtime";
@@ -58,19 +60,40 @@ const ShowMoviePage = ({ movie }) => {
                         </div>
 
                         {/* Cast */}
-                        {movie.stars && <Stars stars={movie.stars} title="Cast" />}
+                        {movie.stars && (
+                            <Stars stars={movie.stars} title="Cast" />
+                        )}
 
                         {/* Directors */}
-                        {movie.stars && <Stars stars={movie.directors} title="Directors" />}
+                        {movie.stars && (
+                            <Stars stars={movie.directors} title="Directors" />
+                        )}
 
                         {/* Writers */}
-                        {movie.stars && <Stars stars={movie.writers} title="Writers" />}
-                        
-                        
-                        <div className="border">Interests component</div>
-                        <div className="border">
-                            Countries & Languages component
-                        </div>
+                        {movie.stars && (
+                            <Stars stars={movie.writers} title="Writers" />
+                        )}
+
+                        {/* Interests */}
+                        {movie.interests && (
+                            <Interests interests={movie.interests} />
+                        )}
+
+                        {/* Countries */}
+                        {movie.originCountries && (
+                            <Countries
+                                countries={movie.originCountries}
+                                title="Countries"
+                            />
+                        )}
+
+                        {/* Languages */}
+                        {movie.spokenLanguages && (
+                            <Countries
+                                countries={movie.spokenLanguages}
+                                title="Languages"
+                            />
+                        )}
                     </div>
 
                     <div className="flex-col hidden md:block">
@@ -80,7 +103,9 @@ const ShowMoviePage = ({ movie }) => {
                                 className="w-lg overflow-hidden object-cover rounded-lg"
                             />
                         )}
-                        <button className="btn btn-secondary w-full mt-6 py-6 font-bold">Add to Watchlist +</button>
+                        <button className="btn btn-secondary w-full mt-6 py-6 font-bold">
+                            Add to Watchlist +
+                        </button>
                     </div>
                 </div>
             </div>

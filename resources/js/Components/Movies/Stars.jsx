@@ -18,11 +18,8 @@ const Stars = ({ stars, title }) => {
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {stars.map((star, index) => (
-                    <Link href={`/star/${star.id}`}>
-                        <div
-                            className="flex justify-between h-full p-2 border border-neutral-800 rounded-lg hover:bg-neutral-900 hover:border-secondary transition-all duration-200"
-                            key={index}
-                        >
+                    <Link href={`/star/${star.id}`} key={index}>
+                        <div className="flex justify-between h-full p-2 border border-neutral-800 rounded-lg hover:bg-neutral-900 hover:border-secondary transition-all duration-200">
                             <div className="flex flex-col gap-y-2">
                                 {star.displayName && (
                                     <div className="font-bold">
@@ -55,16 +52,11 @@ const Stars = ({ stars, title }) => {
                                         <div className="font-semibold text-sm">
                                             Other Names
                                         </div>
-                                        {star.alternativeNames?.map(
-                                            (name) => (
-                                                <div
-                                                    key={name}
-                                                    className="text-xs"
-                                                >
-                                                    {name}
-                                                </div>
-                                            ),
-                                        )}
+                                        {star.alternativeNames?.map((name) => (
+                                            <div key={name} className="text-xs">
+                                                {name}
+                                            </div>
+                                        ))}
                                     </div>
                                 )}
                             </div>
