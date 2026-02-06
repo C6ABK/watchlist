@@ -3,11 +3,15 @@ import NavBar from "../Components/NavBar";
 
 export default function AppLayout({ children, title = "Welcome" }) {
     return (
-        <>
+        <div
+            className="min-h-screen bg-cover bg-center bg-no-repeat bg-fixed"
+            style={{ backgroundImage: "url('/images/bg.jpg')" }}
+        >
             <Head title={title} />
-            <div className="min-h-screen flex flex-col">
+            {/* Gradient overlay */}
+            <div className="min-h-screen bg-linear-to-b from-black/40 to-black/70 backdrop-blur-xs flex flex-col">
                 <NavBar />
-                <main className="container mx-auto max-w-5xl px-4 py-8 grow">
+                <main className="container mx-auto max-w-5xl px-4 py-8 flex-1">
                     {children}
                 </main>
 
@@ -17,6 +21,6 @@ export default function AppLayout({ children, title = "Welcome" }) {
                     </div>
                 </footer>
             </div>
-        </>
+        </div>
     );
 }

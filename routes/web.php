@@ -8,12 +8,12 @@ use Inertia\Inertia;
 
 Route::get('/', function () {
     return Inertia::render('Index');
-});
+})->middleware('guest');
 
-Route::get('/register', [RegisterUserController::class, 'create'])->middleware('guest');
+Route::get('/register', [RegisterUserController::class, 'create'])->name('register')->middleware('guest');
 Route::post('/register', [RegisterUserController::class, 'store'])->middleware('guest');
 
-Route::get('/login', [SessionController::class, 'create'])->middleware('guest');
+Route::get('/login', [SessionController::class, 'create'])->name('login')->middleware('guest');
 Route::post('/login', [SessionController::class, 'store'])->middleware('guest');
 
 Route::post('/logout', [SessionController::class, 'destroy'])->middleware('auth');

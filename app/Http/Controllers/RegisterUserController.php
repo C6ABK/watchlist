@@ -33,6 +33,6 @@ class RegisterUserController extends Controller
 
         Auth::login($user);
 
-        return redirect('/')->with('success', 'Registration complete!');
+        return redirect('/movies/index')->with('success', 'Registration complete!');
     }
 }

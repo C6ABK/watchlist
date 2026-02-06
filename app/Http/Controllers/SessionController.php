@@ -28,7 +28,7 @@ class SessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect('/')->with('success', 'You are now logged in.');
+        return redirect('/movies/index')->with('success', 'You are now logged in.');
     }
 
     public function destroy(Request $request)
