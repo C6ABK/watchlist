@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Movie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Inertia\Inertia;
@@ -91,23 +92,50 @@ class MovieController extends Controller
     /**
      * Display the specified resource.
      */
+    // public function show(string $id)
+    // {
+    //     // API Call to get movie details
+    //     $response = Http::get("https://api.imdbapi.dev/titles/{$id}");
+
+    //     // Check for successful response
+    //     if ($response->successful()) {
+    //         $movie = $response->json();
+
+    //         return Inertia::render('Movie/Show', [
+    //             'movie' => $movie
+    //         ]);
+    //     }
+
+    //     // Handle API error
+    //     return Inertia::render('Movie/Show', [
+    //         'movie' => null,
+    //         'error' => 'Movie not found'
+    //     ]);
+    // }
+
     public function show(string $id)
     {
-        // API Call to get movie details
-        $response = Http::get("https://api.imdbapi.dev/titles/{$id}");
+        // 1 - Check database for movie
+        $movie = Movie::where('movie_id', $id)->first();
+    
+        // 2 - Check if we need API call
+        if(!$movie || $this->needsRefresh($movie)) {
 
-        // Check for successful response
-        if ($response->successful()) {
-            $movie = $response->json();
+            // 3 - Call API
+            $response = Http::get("https://api.imdbapi.dev/titles/{$id}");
+            $data = $response->json();
 
-            return Inertia::render('Movie/Show', [
-                'movie' => $movie
-            ]);
+            // 4 - Store/update movie
+            $movie = $this->storeOrUpdateMovie($data, $id);
         }
 
-        // Handle API error
-        return Intertia::render('Movie/Show', [
-            'movie' => null,
+        // 5 - Load relationships and return to view
+        $movie->load(['genres', 'people']);
+
+        // dd($movie);
+
+        return Inertia::render('Movie/Show', [
+            'movie' => $movie,
             'error' => 'Movie not found'
         ]);
     }
@@ -134,5 +162,39 @@ class MovieController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    private function needsRefresh(?Movie $movie): bool
+    {
+        if (!$movie) return true; // Doesn't exist
+
+        return $movie->updated_at < now()->subDays(30);
+    }
+
+    private function storeOrUpdateMovie($data, $movieId): Movie
+    {
+      
+        $movie = Movie::updateOrCreate(
+            ['movie_id' => $movieId],
+            [
+                'type' => $data['type'],
+                'plot' => $data['plot'] ?? null,
+                'primary_title' => $data['primaryTitle'],
+                'original_title' => $data['originalTitle'] ?? null,
+                'image_url' => $data['primaryImage']['url'] ?? null,
+                'start_year' => $data['startYear'],
+                'end_year' => $data['endYear'] ?? null,
+                'run_time' => $data['runtimeSeconds'] ?? null,
+                'rating_aggregate' => $data['rating']['aggregateRating'] ?? null,
+                'rating_votes' => $data['rating']['voteCount'] ?? null,
+                'metacritic_score' => $data['metacritic']['score'] ?? null,
+                'metacritic_count' => $data['metacritic']['reviewCount'] ?? null
+            ]
+        );
+        
+        // Store relationships
+
+
+        return $movie;
     }
 }

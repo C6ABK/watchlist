@@ -18,10 +18,14 @@ return new class extends Migration
             $table->string('primary_title');
             $table->string('original_title')->nullable();
             $table->string('image_url')->nullable();
+            $table->string('plot')->nullable();
             $table->integer('start_year');
             $table->integer('end_year')->nullable();
             $table->integer('run_time')->nullable();
             $table->decimal('rating_aggregate')->nullable();
+            $table->integer('rating_votes')->nullable();
+            $table->decimal('metacritic_score')->nullable();
+            $table->integer('metacritic_count')->nullable();
             $table->timestamps();
         });
     }

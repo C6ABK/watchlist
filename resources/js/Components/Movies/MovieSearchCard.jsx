@@ -17,7 +17,7 @@ const MovieSearchCard = ({
     const [imageError, setImageError] = useState(false);
 
     return (
-        <Link href={`/movies/${id}`} className="block">
+        <Link href={`/movies/show/${id}`} className="block">
             <div
                 key={id}
                 className="flex bg-neutral border border-neutral rounded-lg shadow-xl lg:hover:scale-105 hover:border hover:border-secondary transition-all duration-200 group relative"

@@ -22,4 +22,4 @@ Route::post('/logout', [SessionController::class, 'destroy'])->middleware('auth'
 Route::get('/movies/index', [MovieController::class, 'index'])->name('movies.search')->middleware('auth');
 Route::post('/movies/search', [MovieController::class, 'search'])->name('movies.search.post')->middleware('auth');
 Route::delete('/movies/search', [MovieController::class, 'clearSearch'])->name('movies.search.clear')->middleware('auth');
-Route::get('/movies/{id}', [MovieController::class, 'show'])->middleware('auth');
+Route::get('/movies/show/{id}', [MovieController::class, 'show'])->middleware('auth');

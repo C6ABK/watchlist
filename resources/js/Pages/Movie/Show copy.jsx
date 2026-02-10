@@ -23,22 +23,22 @@ const ShowMoviePage = ({ movie }) => {
                     <div className="flex flex-col w-full gap-y-4 md:pr-4">
                         <div className="flex gap-x-4">
                             <RatingBadge
-                                rating={movie.rating_aggregate}
+                                rating={movie.rating.aggregateRating}
                             />
                             <div className="flex flex-col text-left grow justify-center">
                                 <div className="font-bold text-2xl">
-                                    {movie.primary_title}
+                                    {movie.primaryTitle}
                                 </div>
                                 <div className="flex gap-x-2 items-center">
-                                    {movie?.original_title && (
+                                    {movie?.originalTitle && (
                                         <div className="text-sm">
-                                            {movie.original_title}
+                                            {movie.originalTitle}
                                         </div>
                                     )}
                                     <div className="flex text-xs">
-                                        {movie.start_year}
-                                        {movie?.end_year && (
-                                            <div> - {movie.end_year}</div>
+                                        {movie.startYear}
+                                        {movie?.endYear && (
+                                            <div> - {movie.endYear}</div>
                                         )}
                                     </div>
                                 </div>
@@ -51,8 +51,8 @@ const ShowMoviePage = ({ movie }) => {
                             <button className="btn btn-secondary w-full mb-4 py-6 font-bold">
                                 Add to Watchlist +
                             </button>
-                            {movie?.image_url && (
-                                <PrimaryImage url={movie.image_url} />
+                            {movie?.primaryImage?.url && (
+                                <PrimaryImage url={movie.primaryImage.url} />
                             )}
                             {/* Genres */}
                             {movie.genres && (
@@ -61,19 +61,19 @@ const ShowMoviePage = ({ movie }) => {
                         </div>
 
                         {/* Runtime & Metacritic */}
-                        {(movie.run_time || movie.metacritic_score) && (
+                        {(movie.runtimeSeconds || movie.metacritic) && (
                             <div className="flex justify-between border-t border-neutral-800 pt-4">
-                                {movie.run_time && (
+                                {movie.runtimeSeconds && (
                                     <Runtime
-                                        seconds={movie.run_time}
+                                        seconds={movie.runtimeSeconds}
                                         className="text-xs"
                                     />
                                 )}
-                                {movie.metacritic_score && (
+                                {movie.metacritic && (
                                     <Metacritic
-                                        score={movie.metacritic_score}
+                                        score={movie.metacritic.score}
                                         reviewCount={
-                                            movie.metacritic_count
+                                            movie.metacritic.reviewCount
                                         }
                                         className="text-xs"
                                     />
@@ -119,8 +119,8 @@ const ShowMoviePage = ({ movie }) => {
                     </div>
 
                     <div className="flex-col hidden md:block">
-                        {movie?.image_url && (
-                            <PrimaryImage url={movie.image_url} />
+                        {movie?.primaryImage?.url && (
+                            <PrimaryImage url={movie.primaryImage.url} />
                         )}
                         <button className="btn btn-secondary w-full mt-4 py-6 font-bold">
                             Add to Watchlist +
