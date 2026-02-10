@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Genre;
 use App\Models\Movie;
+use App\Models\Person;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Inertia\Inertia;
@@ -89,30 +91,6 @@ class MovieController extends Controller
         //
     }
 
-    /**
-     * Display the specified resource.
-     */
-    // public function show(string $id)
-    // {
-    //     // API Call to get movie details
-    //     $response = Http::get("https://api.imdbapi.dev/titles/{$id}");
-
-    //     // Check for successful response
-    //     if ($response->successful()) {
-    //         $movie = $response->json();
-
-    //         return Inertia::render('Movie/Show', [
-    //             'movie' => $movie
-    //         ]);
-    //     }
-
-    //     // Handle API error
-    //     return Inertia::render('Movie/Show', [
-    //         'movie' => null,
-    //         'error' => 'Movie not found'
-    //     ]);
-    // }
-
     public function show(string $id)
     {
         // 1 - Check database for movie
@@ -192,9 +170,86 @@ class MovieController extends Controller
             ]
         );
         
-        // Store relationships
-
+        // Sync relationships
+        $this->syncGenres($movie, $data['genres'] ?? []);
+        $this->syncPeople($movie, $data);
 
         return $movie;
+    }
+
+    private function syncGenres(Movie $movie, array $genres)
+    {
+        $genreIds = [];
+
+        foreach ($genres as $gendreData) {
+            $genre = Genre::firstOrCreate([
+                'genre' => $gendreData
+            ]);
+
+            $genreIds[] = $genre->id;
+        }
+        $movie->genres()->sync($genreIds);
+    }
+
+    private function syncPeople(Movie $movie, array $apiData)
+    {
+        $movie->people()->detach();
+
+        // Directors
+        if (isset($apiData['directors'])) {
+            foreach ($apiData['directors'] as $directorData) {
+                $person = Person::firstOrCreate(
+                    ['person_id' => $directorData['id']],
+                    [
+                        'display_name' => $directorData['displayName'],
+                        'alternative_names' => $directorData['alternativeNames'] ?? null,
+                        'primary_professions' => $directorData['primaryProfessions'] ?? null,
+                        'image_url' => $directorData['primaryImage']['url'] ?? null,
+                    ]
+                );
+
+                $movie->people()->attach($person->id, [
+                    'role' => 'director'
+                ]);
+            }
+        }
+
+        // Writers
+        if (isset($apiData['writers'])) {
+            foreach ($apiData['writers'] as $directorData) {
+                $person = Person::firstOrCreate(
+                    ['person_id' => $directorData['id']],
+                    [
+                        'display_name' => $directorData['displayName'],
+                        'alternative_names' => $directorData['alternativeNames'] ?? null,
+                        'primary_professions' => $directorData['primaryProfessions'] ?? null,
+                        'image_url' => $directorData['primaryImage']['url'] ?? null,
+                    ]
+                );
+
+                $movie->people()->attach($person->id, [
+                    'role' => 'writer'
+                ]);
+            }
+        }
+
+        // Stars
+        if (isset($apiData['stars'])) {
+            foreach ($apiData['stars'] as $directorData) {
+                $person = Person::firstOrCreate(
+                    ['person_id' => $directorData['id']],
+                    [
+                        'display_name' => $directorData['displayName'],
+                        'alternative_names' => $directorData['alternativeNames'] ?? null,
+                        'primary_professions' => $directorData['primaryProfessions'] ?? null,
+                        'image_url' => $directorData['primaryImage']['url'] ?? null,
+                    ]
+                );
+
+                $movie->people()->attach($person->id, [
+                    'role' => 'actor'
+                ]);
+            }
+        }
     }
 }
