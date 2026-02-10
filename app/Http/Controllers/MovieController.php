@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Genre;
+use App\Models\Interest;
 use App\Models\Movie;
 use App\Models\Person;
 use Illuminate\Http\Request;
@@ -108,7 +109,7 @@ class MovieController extends Controller
         }
 
         // 5 - Load relationships and return to view
-        $movie->load(['genres', 'people']);
+        $movie->load(['genres', 'people', 'interests']);
 
         // dd($movie);
 
@@ -172,6 +173,7 @@ class MovieController extends Controller
         
         // Sync relationships
         $this->syncGenres($movie, $data['genres'] ?? []);
+        $this->syncInterests($movie, $data['interests'] ?? []);
         $this->syncPeople($movie, $data);
 
         return $movie;
@@ -181,14 +183,30 @@ class MovieController extends Controller
     {
         $genreIds = [];
 
-        foreach ($genres as $gendreData) {
+        foreach ($genres as $genreData) {
             $genre = Genre::firstOrCreate([
-                'genre' => $gendreData
+                'genre' => $genreData['name'] ?? $genreData['text'] ?? $genreData
             ]);
 
             $genreIds[] = $genre->id;
         }
         $movie->genres()->sync($genreIds);
+    }
+
+    private function syncInterests(Movie $movie, array $interests)
+    {
+        $interestIds = [];
+
+        foreach ($interests as $interest) {
+            $interest = Interest::firstOrCreate([
+                'interest_id' => $interest['id'],
+                'name' => $interest['name'],
+                'isSubGenre' => $interest['isSubGenre'] ?? false
+            ]);
+
+            $interestIds[] = $interest->id;
+        }
+        $movie->interests()->sync($interestIds);
     }
 
     private function syncPeople(Movie $movie, array $apiData)

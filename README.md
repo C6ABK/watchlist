@@ -9,6 +9,8 @@
   -- Star component
   -- Show page poster
 
+- Rename migrations and change relationships
+
 ## Improvements
 
 - Adding API search results to session to preserve?

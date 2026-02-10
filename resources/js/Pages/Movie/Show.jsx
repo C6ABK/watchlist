@@ -98,7 +98,10 @@ const ShowMoviePage = ({ movie }) => {
 
                         {/* Interests */}
                         {movie.interests && (
+                            <>
                             <Interests interests={movie.interests} />
+                            </>
+                            
                         )}
 
                         {/* Countries */}
