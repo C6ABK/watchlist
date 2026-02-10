@@ -10,6 +10,10 @@ import AppLayout from "../../Layouts/AppLayout";
 import { Link } from "@inertiajs/react";
 
 const ShowMoviePage = ({ movie }) => {
+    const directors = movie.people?.filter((person) => person.pivot.role === "director") || [];
+    const writers = movie.people?.filter((person) => person.pivot.role === "writer") || [];
+    const actors = movie.people?.filter((person) => person.pivot.role === "actor") || [];
+
     return (
         <AppLayout title="Movie Show">
             <Link
@@ -22,9 +26,7 @@ const ShowMoviePage = ({ movie }) => {
                 <div className="flex w-full justify-between">
                     <div className="flex flex-col w-full gap-y-4 md:pr-4">
                         <div className="flex gap-x-4">
-                            <RatingBadge
-                                rating={movie.rating_aggregate}
-                            />
+                            <RatingBadge rating={movie.rating_aggregate} />
                             <div className="flex flex-col text-left grow justify-center">
                                 <div className="font-bold text-2xl">
                                     {movie.primary_title}
@@ -55,7 +57,7 @@ const ShowMoviePage = ({ movie }) => {
                                 <PrimaryImage url={movie.image_url} />
                             )}
                             {/* Genres */}
-                            {movie.genres && (
+                            {movie.genres && movie.genres.length > 0 && (
                                 <Genres genres={movie.genres} title="Genres" />
                             )}
                         </div>
@@ -72,9 +74,7 @@ const ShowMoviePage = ({ movie }) => {
                                 {movie.metacritic_score && (
                                     <Metacritic
                                         score={movie.metacritic_score}
-                                        reviewCount={
-                                            movie.metacritic_count
-                                        }
+                                        reviewCount={movie.metacritic_count}
                                         className="text-xs"
                                     />
                                 )}
@@ -82,18 +82,18 @@ const ShowMoviePage = ({ movie }) => {
                         )}
 
                         {/* Cast */}
-                        {movie.stars && (
-                            <Stars stars={movie.stars} title="Cast" />
+                        {actors.length > 0 && (
+                            <Stars stars={actors} title="Cast" />
                         )}
 
                         {/* Directors */}
-                        {movie.stars && (
-                            <Stars stars={movie.directors} title="Directors" />
+                        {directors.length > 0 && (
+                            <Stars stars={directors} title="Directors" />
                         )}
 
                         {/* Writers */}
-                        {movie.stars && (
-                            <Stars stars={movie.writers} title="Writers" />
+                        {writers.length > 0 && (
+                            <Stars stars={writers} title="Writers" />
                         )}
 
                         {/* Interests */}
@@ -126,7 +126,7 @@ const ShowMoviePage = ({ movie }) => {
                             Add to Watchlist +
                         </button>
                         {/* Genres */}
-                        {movie.genres && (
+                        {movie.genres && movie.genres.length > 0 && (
                             <Genres genres={movie.genres} title="Genres" />
                         )}
                     </div>

@@ -6,9 +6,13 @@ const Genres = ({ genres, title }) => {
             <div className="font-bold pb-2">{title}</div>
 
             <div className="grid grid-cols-3 w-full text-center gap-4">
-                {genres.map((genre, index) => (
-                    <Link href={`/genres/${genre}`} key={index} className="text-xs font-semibold text-secondary hover:text-secondary/90">
-                        {genre}
+                {genres.map((genreObj) => (
+                    <Link 
+                        href={`/genres/${genreObj.genre}`} 
+                        key={genreObj.id} 
+                        className="text-xs font-semibold text-secondary hover:text-secondary/90"
+                    >
+                        {genreObj.genre}
                     </Link>
                 ))}
             </div>

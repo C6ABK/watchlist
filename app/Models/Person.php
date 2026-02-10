@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Person extends Model
 {
+    protected $casts = [
+        'alternative_names' => 'array',
+        'primary_professions' => 'array'
+    ];
+
     protected $fillable = [
         'person_id',
         'display_name',

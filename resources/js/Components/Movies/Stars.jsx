@@ -49,21 +49,21 @@ const Stars = ({ stars, title, expanded = false }) => {
                     id="stars"
                 >
                     {stars.map((star, index) => (
-                        <Link href={`/star/${star.id}`} key={index}>
+                        <Link href={`/star/${star.person_id}`} key={index}>
                             <div className="flex justify-between h-full p-2 border border-neutral-800 rounded-lg hover:bg-neutral-900 hover:border-secondary transition-all duration-200">
                                 <div className="flex flex-col gap-y-2">
-                                    {star.displayName && (
+                                    {star['display_name'] && (
                                         <div className="font-bold">
-                                            {star.displayName}
+                                            {star['display_name']}
                                         </div>
                                     )}
 
-                                    {star.primaryProfessions && (
+                                    {star['primary_professions'] && (
                                         <div>
                                             <div className="font-semibold text-xs">
                                                 Professions
                                             </div>
-                                            {star.primaryProfessions?.map(
+                                            {star['primary_professions']?.map(
                                                 (profession) => (
                                                     <div
                                                         key={profession}
@@ -78,12 +78,12 @@ const Stars = ({ stars, title, expanded = false }) => {
                                         </div>
                                     )}
 
-                                    {star.alternativeNames && (
+                                    {star.image_url && (
                                         <div>
                                             <div className="font-semibold text-xs">
                                                 Other Names
                                             </div>
-                                            {star.alternativeNames?.map(
+                                            {star['alternative_names']?.map(
                                                 (name) => (
                                                     <div
                                                         key={name}
@@ -96,10 +96,10 @@ const Stars = ({ stars, title, expanded = false }) => {
                                         </div>
                                     )}
                                 </div>
-                                {star.primaryImage?.url && (
+                                {star.image_url && (
                                     <div className="h-full">
                                         <img
-                                            src={star.primaryImage.url}
+                                            src={star.image_url}
                                             className="aspect-3/4 w-24 overflow-hidden object-cover object-top rounded-lg"
                                             loading="lazy"
                                         />
