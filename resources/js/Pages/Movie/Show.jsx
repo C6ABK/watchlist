@@ -1,4 +1,5 @@
 import Countries from "../../Components/Movies/Countries";
+import Genres from "../../Components/Movies/Genres";
 import Interests from "../../Components/Movies/Interests";
 import Metacritic from "../../Components/Movies/Metacritic";
 import PrimaryImage from "../../Components/Movies/PrimaryImage";
@@ -53,23 +54,32 @@ const ShowMoviePage = ({ movie }) => {
                             {movie?.primaryImage?.url && (
                                 <PrimaryImage url={movie.primaryImage.url} />
                             )}
+                            {/* Genres */}
+                            {movie.genres && (
+                                <Genres genres={movie.genres} title="Genres" />
+                            )}
                         </div>
 
-                        <div className="flex justify-between border-t border-neutral-800 pt-4">
-                            {movie.runtimeSeconds && (
-                                <Runtime
-                                    seconds={movie.runtimeSeconds}
-                                    className="text-xs"
-                                />
-                            )}
-                            {movie.metacritic && (
-                                <Metacritic
-                                    score={movie.metacritic.score}
-                                    reviewCount={movie.metacritic.reviewCount}
-                                    className="text-xs"
-                                />
-                            )}
-                        </div>
+                        {/* Runtime & Metacritic */}
+                        {(movie.runtimeSeconds || movie.metacritic) && (
+                            <div className="flex justify-between border-t border-neutral-800 pt-4">
+                                {movie.runtimeSeconds && (
+                                    <Runtime
+                                        seconds={movie.runtimeSeconds}
+                                        className="text-xs"
+                                    />
+                                )}
+                                {movie.metacritic && (
+                                    <Metacritic
+                                        score={movie.metacritic.score}
+                                        reviewCount={
+                                            movie.metacritic.reviewCount
+                                        }
+                                        className="text-xs"
+                                    />
+                                )}
+                            </div>
+                        )}
 
                         {/* Cast */}
                         {movie.stars && (
@@ -115,6 +125,10 @@ const ShowMoviePage = ({ movie }) => {
                         <button className="btn btn-secondary w-full mt-4 py-6 font-bold">
                             Add to Watchlist +
                         </button>
+                        {/* Genres */}
+                        {movie.genres && (
+                            <Genres genres={movie.genres} title="Genres" />
+                        )}
                     </div>
                 </div>
             </div>
