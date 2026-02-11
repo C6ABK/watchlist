@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Link } from "@inertiajs/react";
+import { optimiseImage } from "../../Utils/imageOptimiser";
+
 
 const Stars = ({ stars, title, expanded = false }) => {
     const [isStarsExpanded, setIsStarsExpanded] = useState(expanded);
@@ -99,7 +101,7 @@ const Stars = ({ stars, title, expanded = false }) => {
                                 {star.image_url && (
                                     <div className="h-full">
                                         <img
-                                            src={star.image_url}
+                                            src={optimiseImage(star.image_url, 'thumb')}
                                             className="aspect-3/4 w-24 overflow-hidden object-cover object-top rounded-lg"
                                             loading="lazy"
                                         />

@@ -97,6 +97,7 @@ export default function MovieSearchPage({
                     <div className="grid lg:grid-cols-2 gap-4 mt-8">
                         {movies.map((movie) => (
                             <MovieSearchCard
+                                key={movie.id}
                                 id={movie.id}
                                 primaryTitle={movie.primaryTitle}
                                 originalTitle={movie.originalTitle}
