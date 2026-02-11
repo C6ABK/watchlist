@@ -14,7 +14,7 @@ class Language extends Model
 
     public function movies(): BelongsToMany
     {
-        return $this->belongsToMany(Movie::class, 'movie_language')
+        return $this->belongsToMany(Movie::class, 'movie_languages')
             ->withTimestamps();
     }
 }

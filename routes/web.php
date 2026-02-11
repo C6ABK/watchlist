@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('Index');
+    return redirect('/login'); // Or redirect to any route you prefer
 })->middleware('guest');
 
 Route::get('/register', [RegisterUserController::class, 'create'])->name('register')->middleware('guest');

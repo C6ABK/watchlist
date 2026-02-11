@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('movie_language', function (Blueprint $table) {
+        Schema::create('movie_languages', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Movie::class)->constrained();
             $table->foreignIdFor(Language::class)->constrained();
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('_movie__language_');
+        Schema::dropIfExists('movie__languages');
     }
 };

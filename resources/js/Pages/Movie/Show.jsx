@@ -105,17 +105,17 @@ const ShowMoviePage = ({ movie }) => {
                         )}
 
                         {/* Countries */}
-                        {movie.originCountries && (
+                        {movie.countries && (
                             <Countries
-                                countries={movie.originCountries}
+                                countries={movie.countries}
                                 title="Countries"
                             />
                         )}
 
                         {/* Languages */}
-                        {movie.spokenLanguages && (
+                        {movie.languages && (
                             <Countries
-                                countries={movie.spokenLanguages}
+                                countries={movie.languages}
                                 title="Languages"
                             />
                         )}

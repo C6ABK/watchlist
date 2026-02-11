@@ -15,7 +15,7 @@ class Interest extends Model
 
     public function movies(): BelongsToMany
     {
-        return $this->belongsToMany(Movie::class, 'movie_interest')
+        return $this->belongsToMany(Movie::class, 'movie_interests')
             ->withTimestamps();
     }
 }

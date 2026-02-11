@@ -11,10 +11,4 @@ class Country extends Model
         'code',
         'name'
     ];
-
-    public function movies(): BelongsToMany
-    {
-        return $this->belongsToMany(Movie::class, 'movie_country')
-            ->withTimestamps();
-    }
 }

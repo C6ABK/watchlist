@@ -14,3 +14,4 @@
 ## Improvements
 
 - Adding API search results to session to preserve?
+- Refactor movie controller by moving stuff into seperate services

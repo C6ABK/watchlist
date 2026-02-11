@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Country;
 use App\Models\Genre;
 use App\Models\Interest;
+use App\Models\Language;
 use App\Models\Movie;
 use App\Models\Person;
 use Illuminate\Http\Request;
@@ -109,7 +111,7 @@ class MovieController extends Controller
         }
 
         // 5 - Load relationships and return to view
-        $movie->load(['genres', 'people', 'interests']);
+        $movie->load(['genres', 'people', 'interests', 'countries', 'languages']);
 
         // dd($movie);
 
@@ -174,8 +176,10 @@ class MovieController extends Controller
         // Sync relationships
         $this->syncGenres($movie, $data['genres'] ?? []);
         $this->syncInterests($movie, $data['interests'] ?? []);
+        $this->syncCountries($movie, $data['originCountries']);
+        $this->syncLanguages($movie, $data['spokenLanguages']);
         $this->syncPeople($movie, $data);
-
+        
         return $movie;
     }
 
@@ -193,15 +197,45 @@ class MovieController extends Controller
         $movie->genres()->sync($genreIds);
     }
 
+    private function syncCountries(Movie $movie, array $countries)
+    {
+        $countryIds = [];
+
+        foreach ($countries as $countryData) {
+            $country = Country::firstOrCreate([
+                'code' => $countryData['code'],
+                'name' => $countryData['name']
+            ]);
+
+            $countryIds[] = $country->id;
+        }
+        $movie->countries()->sync($countryIds);
+    }
+
+    private function syncLanguages(Movie $movie, array $languages)
+    {
+        $languageIds = [];
+
+        foreach ($languages as $languageData) {
+            $language = Language::firstOrCreate([
+                'code' => $languageData['code'],
+                'name' => $languageData['name']
+            ]);
+
+            $languageIds[] = $language->id;
+        }
+        $movie->languages()->sync($languageIds);
+    }
+
     private function syncInterests(Movie $movie, array $interests)
     {
         $interestIds = [];
 
-        foreach ($interests as $interest) {
+        foreach ($interests as $interestData) {
             $interest = Interest::firstOrCreate([
-                'interest_id' => $interest['id'],
-                'name' => $interest['name'],
-                'isSubGenre' => $interest['isSubGenre'] ?? false
+                'interest_id' => $interestData['id'],
+                'name' => $interestData['name'],
+                'isSubGenre' => $interestData['isSubGenre'] ?? false
             ]);
 
             $interestIds[] = $interest->id;

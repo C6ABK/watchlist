@@ -39,7 +39,17 @@ class Movie extends Model
 
     public function interests(): BelongsToMany
     {
-        return $this->belongsToMany(Interest::class, 'movie_interest');
+        return $this->belongsToMany(Interest::class, 'movie_interests');
+    }
+
+    public function countries(): BelongsToMany
+    {
+        return $this->belongsToMany(Country::class, 'movie_countries');
+    }
+
+    public function languages(): BelongsToMany
+    {
+        return $this->belongsToMany(Language::class, 'movie_languages');
     }
 
     public function people(): BelongsToMany
