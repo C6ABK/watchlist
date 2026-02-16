@@ -3,6 +3,7 @@
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\RegisterUserController;
 use App\Http\Controllers\SessionController;
+use App\Http\Controllers\WatchlistController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -23,3 +24,6 @@ Route::get('/movies/index', [MovieController::class, 'index'])->name('movies.sea
 Route::post('/movies/search', [MovieController::class, 'search'])->name('movies.search.post')->middleware('auth');
 Route::delete('/movies/search', [MovieController::class, 'clearSearch'])->name('movies.search.clear')->middleware('auth');
 Route::get('/movies/show/{id}', [MovieController::class, 'show'])->middleware('auth');
+
+// Watchlists
+Route::get('/watchlists/view', [WatchlistController::class, 'index'])->middleware('auth');
