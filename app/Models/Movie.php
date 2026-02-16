@@ -73,29 +73,11 @@ class Movie extends Model
         return $this->people()
                     ->wherePivot('role', 'director');
     }
+    public function watchlists(): BelongsToMany
+    {
+        return $this->belongsToMany(Watchlist::class, 'watchlist_movies')
+            ->withPivot(['added_by_user_id', 'notes', 'priority', 'is_watched', 'watched_at'])
+            ->withTimestamps();
+    }
 
 }
-
-// <?php
-
-// namespace App\Models;
-
-// use Illuminate\Database\Eloquent\Model;
-// use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-
-// class Movie extends Model
-// {
-//     // Core relationships
-
-//     public function watchlists(): BelongsToMany
-//     {
-//         return $this->belongsToMany(Watchlist::class, 'watchlist_movies')
-//                     ->withPivot(['added_by_user_id', 'added_at', 'notes'])
-//                     ->withTimestamps();
-//     }
-//     // Helper methods
-//     public function isInWatchlist(Watchlist $watchlist): bool
-//     {
-//         return $this->watchlists()->where('watchlist_id', $watchlist->id)->exists();
-//     }
-// }
