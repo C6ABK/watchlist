@@ -3,6 +3,7 @@ import RatingBadge from "./RatingBadge";
 import { Link } from "@inertiajs/react";
 import ImageModal from "./ImageModal";
 import { optimiseImage } from "../../Utils/imageOptimiser";
+import AddToWatchlistModal from "../Watchlists/AddToWatchlistModal";
 
 const MovieSearchCard = ({
     id,
@@ -100,9 +101,10 @@ const MovieSearchCard = ({
                         <div className="flex flex-col">
                             <div className="flex justify-between items-center">
                                 <div>{type}</div>
-                                <button className="btn btn-base-300 hover:btn-secondary rounded-full text-xl w-10 flex items-center justify-center transition-colors duration-200 focus:btn-secondary">
+                                {/* <button className="btn btn-base-300 hover:btn-secondary rounded-full text-xl w-10 flex items-center justify-center transition-colors duration-200 focus:btn-secondary">
                                     +
-                                </button>
+                                </button> */}
+                                <AddToWatchlistModal movieId={id} />
                             </div>
                         </div>
                     </div>

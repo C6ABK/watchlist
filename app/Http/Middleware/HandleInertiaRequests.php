@@ -38,8 +38,11 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'auth' => [
-                'user' => $request->user() ? $request->user()->only(['id', 'first_name', 'last_name', 'email']) : null
+                'user' => $request->user()?->only(['id', 'first_name', 'last_name', 'email']),
             ],
+            'watchlists' => $request->user()
+                ? $request->user()->watchlists()->select('id', 'name')->get()
+                : [],
         ];
     }
 }

@@ -26,4 +26,12 @@ Route::delete('/movies/search', [MovieController::class, 'clearSearch'])->name('
 Route::get('/movies/show/{id}', [MovieController::class, 'show'])->middleware('auth');
 
 // Watchlists
-Route::get('/watchlists/view', [WatchlistController::class, 'index'])->middleware('auth');
+Route::middleware('auth')->group(function () {
+    Route::get('/watchlists', [WatchlistController::class, 'index'])->name('watchlists.index');
+    Route::get('/watchlists/create', [WatchlistController::class, 'create'])->name('watchlists.create');
+    Route::post('/watchlists', [WatchlistController::class, 'store'])->name('watchlists.store');
+    Route::get('/watchlists/{watchlist}', [WatchlistController::class, 'show'])->name('watchlists.show');
+    Route::post('/watchlists/{watchlist}/movies', [WatchlistController::class, 'addMovie'])->name('watchlists.movies.add');
+    Route::delete('/watchlists/{watchlist}/movies/{movie}', [WatchlistController::class, 'removeMovie'])->name('watchlists.movies.remove');
+    Route::patch('/watchlists/{watchlist}/movies/{movie}/watched', [WatchlistController::class, 'toggleWatched'])->name('watchlists.movies.watched');
+});

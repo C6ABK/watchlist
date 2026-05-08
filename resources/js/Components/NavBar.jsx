@@ -47,7 +47,7 @@ export default function NavBar() {
                         {isAuthenticated ? (
                             <>
                                 <li>
-                                    <Link href="/watchlists/view">
+                                    <Link href="/watchlists">
                                         Watchlists
                                     </Link>
                                 </li>
@@ -76,7 +76,7 @@ export default function NavBar() {
                     {isAuthenticated ? (
                         <>
                             <li>
-                                <Link href="/watchlists/view">Watchlists</Link>
+                                <Link href="/watchlists">Watchlists</Link>
                             </li>
                             <li>
                                 <Link href="/movies/index">Search</Link>

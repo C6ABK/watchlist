@@ -8,6 +8,7 @@ import Runtime from "../../Components/Movies/Runtime";
 import Stars from "../../Components/Movies/Stars";
 import AppLayout from "../../Layouts/AppLayout";
 import { Link } from "@inertiajs/react";
+import AddToWatchlistModal from "../../Components/Watchlists/AddToWatchlistModal";
 
 const ShowMoviePage = ({ movie }) => {
     const directors = movie.people?.filter((person) => person.pivot.role === "director") || [];
@@ -50,9 +51,7 @@ const ShowMoviePage = ({ movie }) => {
 
                         {/* Mobile Add to Watchlist Button */}
                         <div className="md:hidden border-t border-neutral-800 pt-4">
-                            <button className="btn btn-secondary w-full mb-4 py-6 font-bold">
-                                Add to Watchlist +
-                            </button>
+                            <AddToWatchlistModal movieId={movie.id} />
                             {movie?.image_url && (
                                 <PrimaryImage url={movie.image_url} />
                             )}
@@ -125,9 +124,7 @@ const ShowMoviePage = ({ movie }) => {
                         {movie?.image_url && (
                             <PrimaryImage url={movie.image_url} />
                         )}
-                        <button className="btn btn-secondary w-full mt-4 py-6 font-bold">
-                            Add to Watchlist +
-                        </button>
+                        <AddToWatchlistModal movieId={movie.id} />
                         {/* Genres */}
                         {movie.genres && movie.genres.length > 0 && (
                             <Genres genres={movie.genres} title="Genres" />
