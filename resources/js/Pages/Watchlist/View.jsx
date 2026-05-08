@@ -13,7 +13,7 @@ export default function ViewWatchlist({ watchlists }) {
                 <div className="text-center py-16">
                     <p className="mb-4">No watchlists yet.</p>
                     <Link
-                        href="/watchlists.create"
+                        href="/watchlists/create"
                         className="btn btn-secondary"
                     >
                         Create your first list

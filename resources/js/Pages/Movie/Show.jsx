@@ -51,7 +51,7 @@ const ShowMoviePage = ({ movie }) => {
 
                         {/* Mobile Add to Watchlist Button */}
                         <div className="md:hidden border-t border-neutral-800 pt-4">
-                            <AddToWatchlistModal movieId={movie.movie_id} />
+                            <AddToWatchlistModal movieId={movie.movie_id} className="btn btn-secondary w-full mt-4 py-6 font-bold" label="Add to Watchlist" />
                             {movie?.image_url && (
                                 <PrimaryImage url={movie.image_url} />
                             )}
@@ -124,7 +124,7 @@ const ShowMoviePage = ({ movie }) => {
                         {movie?.image_url && (
                             <PrimaryImage url={movie.image_url} />
                         )}
-                        <AddToWatchlistModal movieId={movie.movie_id} />
+                        <AddToWatchlistModal movieId={movie.movie_id} className="btn btn-secondary w-full mt-4 py-6 font-bold" label="Add to Watchlist" />
                         {/* Genres */}
                         {movie.genres && movie.genres.length > 0 && (
                             <Genres genres={movie.genres} title="Genres" />

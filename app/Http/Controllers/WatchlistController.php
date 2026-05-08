@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Repositories\MovieRepository;
 use App\Services\MovieSearchService;
+use App\Services\AnthropicService;
 
 class WatchlistController extends Controller
 {
@@ -50,7 +51,10 @@ class WatchlistController extends Controller
     {
         abort_if($watchlist->user_id !== auth()->id(), 403);
         $watchlist->load('movies');
-        return Inertia::render('Watchlist/Show', ['watchlist' => $watchlist]);
+        return Inertia::render('Watchlist/Show', [
+            'watchlist' => $watchlist,
+            'recommendations' => session('recommendations'),
+        ]);
     }
 
     public function addMovie(Request $request, Watchlist $watchlist)
@@ -62,14 +66,19 @@ class WatchlistController extends Controller
 
         if (!$movie) {
             $apiData = app(MovieSearchService::class)->getMovieDetails($request->movie_id);
-            $movie = app(MovieRepository::class)->createOrUpdate($apiData, $request->movieId);
+            $movie = app(MovieRepository::class)->createOrUpdate($apiData, $request->movie_id);
         }
 
         $watchlist->movies()->syncWithoutDetaching([
             $movie->id => ['added_by_user_id' => auth()->id()]
         ]);
 
-        return back();
+        $previous = url()->previous();
+        if (str_ends_with(parse_url($previous, PHP_URL_PATH) ?? '', '/movies/search')) {
+            return redirect('/movies/index');
+        }
+
+        return redirect($previous);
     }
 
     public function removeMovie(Watchlist $watchlist, Movie $movie)
@@ -91,5 +100,59 @@ class WatchlistController extends Controller
         ]);
 
         return back();
+    }
+
+    public function destroy(Watchlist $watchlist)
+    {
+        abort_if($watchlist->user_id !== auth()->id(), 403);
+        $watchlist->delete();
+        return redirect()->route('watchlists.index');
+    }
+
+    public function recommendations(Watchlist $watchlist)
+    {
+        abort_if($watchlist->user_id !== auth()->id(), 403);
+
+        $watchlist->load('movies');
+
+        if ($watchlist->movies->isEmpty()) {
+            return back()->with('error', 'Add some films to your list first.');
+        }
+
+        $titles = $watchlist->movies
+            ->map(fn($m) => $m->primary_title . ' (' . $m->start_year . ')')
+            ->join(', ');
+
+        $prompt = "A user's watchlist contains: {$titles}.
+
+Recommend 5 films or TV shows they would enjoy that are NOT already in their list.
+You MUST provide a real, accurate IMDb ID for each (format: tt followed by numbers, e.g. tt0111161).
+Respond ONLY with a valid JSON array, no other text:
+[{\"title\": \"...\", \"year\": 2020, \"imdb_id\": \"tt0111161\", \"reason\": \"one sentence why they'd like it based on their list\"}]";
+
+        $result = app(AnthropicService::class)->ask($prompt);
+
+        // Strip markdown code fences if Claude wraps the response
+        $result = trim(preg_replace('/^```(?:json)?\s*/m', '', preg_replace('/\s*```$/m', '', $result)));
+        $recommendations = json_decode($result, true) ?? [];
+
+        // Enrich each recommendation with poster image by fetching from the API
+        $searchService = app(MovieSearchService::class);
+        $repository = app(MovieRepository::class);
+
+        $enriched = collect($recommendations)->map(function ($rec) use ($searchService, $repository) {
+            try {
+                $details = $searchService->getMovieDetails($rec['imdb_id']);
+                $movie = $repository->createOrUpdate($details, $rec['imdb_id']);
+                $rec['image_url'] = $movie->image_url;
+                $rec['year'] = $movie->start_year;
+            } catch (\Exception $e) {
+                $rec['image_url'] = null;
+            }
+            return $rec;
+        })->toArray();
+
+        session()->flash('recommendations', $enriched);
+        return redirect()->route('watchlists.show', $watchlist);
     }
 }

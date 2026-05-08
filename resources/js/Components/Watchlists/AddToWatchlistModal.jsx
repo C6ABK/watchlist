@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createPortal } from "react-dom";
 import { router, usePage, Link } from "@inertiajs/react";
 
-export default function AddToWatchlistModal({ movieId }) {
+export default function AddToWatchlistModal({ movieId, className = "btn btn-base-300 hover:btn-secondary rounded-full text-xl w-10 flex items-center justify-center transition-colors duration-200", label = "+" }) {
     const [open, setOpen] = useState(false);
     const { watchlists } = usePage().props;
 
@@ -26,9 +26,9 @@ export default function AddToWatchlistModal({ movieId }) {
         <>
             <button
                 onClick={handleOpen}
-                className="btn btn-base-300 hover:btn-secondary rounded-full text-xl w-10 flex items-center justify-center transition-colors duration-200"
+                className={className}
             >
-                +
+                {label}
             </button>
 
             {open && createPortal(
