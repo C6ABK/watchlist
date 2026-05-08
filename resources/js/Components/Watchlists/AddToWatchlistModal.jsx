@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { router, usePage, Link } from "@inertiajs/react";
 
 export default function AddToWatchlistModal({ movieId }) {
@@ -30,7 +31,7 @@ export default function AddToWatchlistModal({ movieId }) {
                 +
             </button>
 
-            {open && (
+            {open && createPortal(
                 <div
                     className="fixed inset-0 bg-black/75 z-50 flex items-center justify-center"
                     onClick={() => setOpen(false)}
@@ -74,7 +75,8 @@ export default function AddToWatchlistModal({ movieId }) {
                             Cancel
                         </button>
                     </div>
-                </div>
+                </div>,
+             document.body   
             )}
         </>
     );

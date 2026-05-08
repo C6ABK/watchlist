@@ -6,6 +6,8 @@ use App\Models\Movie;
 use App\Models\Watchlist;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Repositories\MovieRepository;
+use App\Services\MovieSearchService;
 
 class WatchlistController extends Controller
 {
@@ -54,10 +56,17 @@ class WatchlistController extends Controller
     public function addMovie(Request $request, Watchlist $watchlist)
     {
         abort_if($watchlist->user_id !== auth()->id(), 403);
-        $request->validate(['movie_id' => 'required|exists:movies,id']);
+        $request->validate(['movie_id' => 'required|string']);
+
+        $movie = Movie::where('movie_id', $request->movie_id)->first();
+
+        if (!$movie) {
+            $apiData = app(MovieSearchService::class)->getMovieDetails($request->movie_id);
+            $movie = app(MovieRepository::class)->createOrUpdate($apiData, $request->movieId);
+        }
 
         $watchlist->movies()->syncWithoutDetaching([
-            $request->movie_id => ['added_by_user_id' => auth()->id()]
+            $movie->id => ['added_by_user_id' => auth()->id()]
         ]);
 
         return back();

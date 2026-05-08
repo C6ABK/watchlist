@@ -47,10 +47,10 @@ export default function ShowWatchlist({ watchlist }) {
                                 <img
                                     src={movie.image_url}
                                     alt={movie.primary_title}
-                                    className="h-16 w-11 object-cover rounded flex-shrink-0"
+                                    className="h-16 w-11 object-cover rounded hrink-0"
                                 />
                             ) : (
-                                <div className="h-16 w-11 bg-neutral-900 rounded flex-shrink-0" />
+                                <div className="h-16 w-11 bg-neutral-900 rounded shrink-0" />
                             )}
                             <div className="flex-1 min-w-0">
                                 <Link
@@ -63,7 +63,7 @@ export default function ShowWatchlist({ watchlist }) {
                                     {movie.start_year}
                                 </div>
                             </div>
-                            <div className="flex gap-x-2 flex-shrink-0">
+                            <div className="flex gap-x-2 shrink-0">
                                 <button
                                     onClick={() => toggleWatched(movie.id)}
                                     className={`btn btn-sm ${movie.pivot.is_watched ? "btn-success" : "btn-ghost"}`}
