@@ -7,6 +7,8 @@ use App\Http\Controllers\WatchlistController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+
+
 Route::get('/', function () {
     return Inertia::render('Index');
 })->middleware('guest');
@@ -37,4 +39,5 @@ Route::middleware('auth')->group(function () {
     Route::patch('/watchlists/{watchlist}/movies/{movie}/watched', [WatchlistController::class, 'toggleWatched'])->name('watchlists.movies.watched');
     Route::post('/watchlists/{watchlist}/recommendations', [WatchlistController::class, 'recommendations'])->name('watchlists.recommendations');
     Route::get('/logs', [WatchlistController::class, 'logs'])->name('logs');
+    Route::get('/debug/users', fn() => dd(App\Models\User::all()->toArray()));
 });
