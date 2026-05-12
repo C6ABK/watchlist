@@ -103,6 +103,58 @@ class WatchlistController extends Controller
         return back();
     }
 
+    public function logs()
+    {
+        $path = storage_path('logs/laravel.log');
+
+        if (!file_exists($path)) {
+            return Inertia::render('Watchlist/Logs', ['entries' => []]);
+        }
+
+        $lines = array_reverse(file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
+
+        $logTypes = [
+            'enrichment'       => 'Recommendation enrichment',
+            'db_title_fallback'  => 'Recommendation DB title fallback',
+            'search_fallback'  => 'Recommendation search fallback',
+        ];
+
+        $entries = collect($lines)
+            ->filter(fn($line) => str_contains($line, 'Recommendation enrichment')
+                || str_contains($line, 'Recommendation DB title fallback')
+                || str_contains($line, 'Recommendation search fallback'))
+            ->map(function ($line) use ($logTypes) {
+                preg_match('/\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\]/', $line, $timeMatch);
+
+                $type = 'enrichment';
+                $label = 'Recommendation enrichment';
+                foreach ($logTypes as $key => $logLabel) {
+                    if (str_contains($line, $logLabel)) {
+                        $type = $key;
+                        $label = $logLabel;
+                        break;
+                    }
+                }
+
+                preg_match('/' . preg_quote($label, '/') . ' ({.+})/', $line, $dataMatch);
+                if (!isset($dataMatch[1])) return null;
+
+                $data = json_decode($dataMatch[1], true);
+                if (!$data) return null;
+
+                return [
+                    'type'      => $type,
+                    'timestamp' => $timeMatch[1] ?? null,
+                    ...$data,
+                ];
+            })
+            ->filter()
+            ->take(50)
+            ->values();
+
+        return Inertia::render('Watchlist/Logs', ['entries' => $entries]);
+    }
+
     public function destroy(Watchlist $watchlist)
     {
         abort_if($watchlist->user_id !== auth()->id(), 403);
@@ -170,16 +222,71 @@ Respond ONLY with a valid JSON array, no other text:
                 ]);
 
                 if ($similarity < 60) {
-                    $rec['image_url'] = null;
+                    // Fallback 1: check DB by title before hitting the search API
+                    $dbMatch = $repository->findSimilarByTitle($rec['title']);
+
+                    if ($dbMatch) {
+                        similar_text(strtolower($dbMatch->primary_title), strtolower($rec['title']), $dbSimilarity);
+
+                        Log::info('Recommendation DB title fallback', [
+                            'claude_title' => $rec['title'],
+                            'db_title'     => $dbMatch->primary_title,
+                            'similarity'   => round($dbSimilarity, 1),
+                            'accepted'     => true,
+                        ]);
+
+                        $rec['image_url'] = $dbMatch->image_url;
+                        $rec['year']      = $dbMatch->start_year;
+                        $rec['imdb_id']   = $dbMatch->movie_id;
+                        return $rec;
+                    }
+
+                    // Fallback 2: search by title to find the correct movie
+                    $searchResults = $searchService->search($rec['title']);
+                    $topResult = $searchResults[0] ?? null;
+
+                    if ($topResult) {
+                        similar_text(
+                            strtolower($topResult['primaryTitle']),
+                            strtolower($rec['title']),
+                            $searchSimilarity
+                        );
+
+                        Log::info('Recommendation search fallback', [
+                            'claude_title'   => $rec['title'],
+                            'search_title'   => $topResult['primaryTitle'],
+                            'similarity'     => round($searchSimilarity, 1),
+                            'accepted'       => $searchSimilarity >= 60,
+                        ]);
+
+                        if ($searchSimilarity >= 60) {
+                            $rec['image_url'] = $topResult['primaryImage']['url'] ?? null;
+                            $rec['year']      = $topResult['startYear'] ?? $rec['year'];
+                            $rec['imdb_id']   = $topResult['id'];
+                        } else {
+                            $rec['image_url'] = null;
+                        }
+                    } else {
+                        $rec['image_url'] = null;
+                    }
                 } else {
                     $rec['image_url'] = $movie->image_url;
                     $rec['year'] = $movie->start_year;
                 }
             } catch (\Exception $e) {
-                $rec['image_url'] = null;
+                Log::info('Recommendation enrichment', [
+                    'claude_title' => $rec['title'],
+                    'db_title'     => null,
+                    'imdb_id'      => $rec['imdb_id'] ?? null,
+                    'similarity'   => 0,
+                    'source'       => 'api',
+                    'accepted'     => false,
+                    'error'        => 'invalid_id',
+                ]);
+                return null;
             }
             return $rec;
-        })->toArray();
+        })->filter()->values()->toArray();
 
         session()->flash('recommendations', $enriched);
         return redirect()->route('watchlists.show', $watchlist);

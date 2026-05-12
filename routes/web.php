@@ -35,5 +35,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/watchlists/{watchlist}', [WatchlistController::class, 'destroy'])->name('watchlists.destroy');
     Route::delete('/watchlists/{watchlist}/movies/{movie}', [WatchlistController::class, 'removeMovie'])->name('watchlists.movies.remove');
     Route::patch('/watchlists/{watchlist}/movies/{movie}/watched', [WatchlistController::class, 'toggleWatched'])->name('watchlists.movies.watched');
-    Route::post('/watchlists/{watchlist}/recommendations', [WatchlistController::class, 'recommendations'])->named('watchlists.recommendations');
+    Route::post('/watchlists/{watchlist}/recommendations', [WatchlistController::class, 'recommendations'])->name('watchlists.recommendations');
+    Route::get('/logs', [WatchlistController::class, 'logs'])->name('logs');
 });

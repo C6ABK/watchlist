@@ -14,7 +14,9 @@ export default function ShowWatchlist({ watchlist, recommendations }) {
     const deleteWatchlist = () =>
         router.delete(`/watchlists/${watchlist.id}`);
     const getRecommendations = () =>
-        post(`/watchlists/${watchlist.id}/recommendations`);
+        post(`/watchlists/${watchlist.id}/recommendations`, {
+            preserveScroll: true,
+        });
 
     return (
         <AppLayout title={watchlist.name}>

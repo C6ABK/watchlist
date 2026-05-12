@@ -12,6 +12,34 @@ class MovieRepository
         return Movie::where('movie_id', $movieId)->first();
     }
 
+    public function findSimilarByTitle(string $title, float $threshold = 60): ?Movie
+    {
+        $words = array_filter(explode(' ', $title), fn($w) => strlen($w) > 3);
+
+        if (empty($words)) {
+            $candidates = Movie::all();
+        } else {
+            $query = Movie::query();
+            foreach ($words as $word) {
+                $query->orWhere('primary_title', 'like', '%' . $word . '%');
+            }
+            $candidates = $query->get();
+        }
+
+        $best = null;
+        $bestSimilarity = 0;
+
+        foreach ($candidates as $candidate) {
+            similar_text(strtolower($candidate->primary_title), strtolower($title), $similarity);
+            if ($similarity > $bestSimilarity) {
+                $bestSimilarity = $similarity;
+                $best = $candidate;
+            }
+        }
+
+        return $bestSimilarity >= $threshold ? $best : null;
+    }
+
     public function needsRefresh(?Movie $movie): bool
     {
         if (!$movie) return true;
