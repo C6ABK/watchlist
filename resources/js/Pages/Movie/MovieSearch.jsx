@@ -42,7 +42,7 @@ export default function MovieSearchPage({
     };
 
     return (
-        <AppLayout title="API Testing Page">
+        <AppLayout title="Search Movies & Shows">
             <div className="text-2xl font-bold mb-4">
                 Search Movies & TV Shows
             </div>
