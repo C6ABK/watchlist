@@ -53,6 +53,7 @@ export default function MovieSearchPage({
                         type="text"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && searchMovies()}
                         placeholder="Search movies and shows..."
                         className="input focus:border-secondary focus:outline-none w-full"
                     />
