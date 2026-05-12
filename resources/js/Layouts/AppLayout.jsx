@@ -17,7 +17,7 @@ export default function AppLayout({ children, title = "Welcome" }) {
 
                 <footer className="footer footer-center p-4 text-xs text-base-content">
                     <div>
-                        <p>Copyright © 2026 - All rights reserved</p>
+                        <p><a href="https://www.barkitsolutions.com/">© 2026 - Bark IT Solutions</a></p>
                     </div>
                 </footer>
             </div>
