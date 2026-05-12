@@ -9,6 +9,7 @@ use Inertia\Inertia;
 use App\Repositories\MovieRepository;
 use App\Services\MovieSearchService;
 use App\Services\AnthropicService;
+use Illuminate\Support\Facades\Log;
 
 class WatchlistController extends Controller
 {
@@ -127,8 +128,9 @@ class WatchlistController extends Controller
 
 Recommend 5 films or TV shows they would enjoy that are NOT already in their list.
 You MUST provide a real, accurate IMDb ID for each (format: tt followed by numbers, e.g. tt0111161).
+Write the reason in second person, addressing the user directly (e.g. \"You'll love this if...\", \"Based on your taste for...\").
 Respond ONLY with a valid JSON array, no other text:
-[{\"title\": \"...\", \"year\": 2020, \"imdb_id\": \"tt0111161\", \"reason\": \"one sentence why they'd like it based on their list\"}]";
+[{\"title\": \"...\", \"year\": 2020, \"imdb_id\": \"tt0111161\", \"reason\": \"one sentence why you'd like it based on your list\"}]";
 
         $result = app(AnthropicService::class)->ask($prompt);
 
@@ -136,16 +138,43 @@ Respond ONLY with a valid JSON array, no other text:
         $result = trim(preg_replace('/^```(?:json)?\s*/m', '', preg_replace('/\s*```$/m', '', $result)));
         $recommendations = json_decode($result, true) ?? [];
 
-        // Enrich each recommendation with poster image by fetching from the API
+        // Add poster image from the movie API
         $searchService = app(MovieSearchService::class);
         $repository = app(MovieRepository::class);
 
         $enriched = collect($recommendations)->map(function ($rec) use ($searchService, $repository) {
             try {
-                $details = $searchService->getMovieDetails($rec['imdb_id']);
-                $movie = $repository->createOrUpdate($details, $rec['imdb_id']);
-                $rec['image_url'] = $movie->image_url;
-                $rec['year'] = $movie->start_year;
+                $movie = $repository->findByMovieId($rec['imdb_id']);
+
+                $source = 'db';
+                if (!$movie) {
+                    $source = 'api';
+                    $details = $searchService->getMovieDetails($rec['imdb_id']);
+                    $movie = $repository->createOrUpdate($details, $rec['imdb_id']);
+                }
+
+                // Validate the title matches to catch hallucinated IDs
+                similar_text(
+                    strtolower($movie->primary_title),
+                    strtolower($rec['title']),
+                    $similarity
+                );
+
+                Log::info('Recommendation enrichment', [
+                    'claude_title'  => $rec['title'],
+                    'db_title'      => $movie->primary_title,
+                    'imdb_id'       => $rec['imdb_id'],
+                    'similarity'    => round($similarity, 1),
+                    'source'        => $source,
+                    'accepted'      => $similarity >= 60,
+                ]);
+
+                if ($similarity < 60) {
+                    $rec['image_url'] = null;
+                } else {
+                    $rec['image_url'] = $movie->image_url;
+                    $rec['year'] = $movie->start_year;
+                }
             } catch (\Exception $e) {
                 $rec['image_url'] = null;
             }
